@@ -43,7 +43,7 @@ app.get('/', async (req, res) => {
             alertesStock: rows.length,
             vendesAvui: "150.00" 
         });
-    } catch (e) { res.status(500).send("Error al Dashboard"); }
+    } catch (e) { res.status(500).send(e.message); }
 });
 
 app.get('/productes', async (req, res) => {
