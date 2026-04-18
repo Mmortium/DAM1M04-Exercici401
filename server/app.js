@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const hbs = require('hbs');
-const MySQL = require('./utilsMySQL');
+const MySQL = require('./utilsMySQL'); // Se mantiene igual porque están en la misma carpeta
 
 const app = express();
 const port = 3000;
@@ -17,13 +17,15 @@ if (!isProxmox) {
 }
 
 // 2. Configuració de rutes estàtiques (public/css i public/js)
-app.use(express.static('public'));
+// Subimos un nivel (..) porque public está fuera de la carpeta server
+app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(express.urlencoded({ extended: true }));
 
-// 3. Configuració de Vistes (Aquí està el que m'has passat)
-app.set('views', path.join(__dirname, 'server', 'views'));
+// 3. Configuració de Vistes
+// Como ya estamos en la carpeta 'server', no la añadimos a la ruta
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-hbs.registerPartials(path.join(__dirname, 'server', 'views', 'partials'));
+hbs.registerPartials(path.join(__dirname, 'views', 'partials'));
 
 // 4. Helpers per a les plantilles
 hbs.registerHelper('colorStock', (stock) => {
