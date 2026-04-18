@@ -17,7 +17,6 @@ if (!isProxmox) {
 }
 
 // 2. Configuració de rutes estàtiques (public/css i public/js)
-// Subimos un nivel (..) porque public está fuera de la carpeta server
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(express.urlencoded({ extended: true }));
 
