@@ -1,0 +1,12 @@
+/* Variables per defecte (Tema Clar) */
+.tema-clar { --bg: #ffffff; --txt: #333333; }
+.tema-nit { --bg: #2c3e50; --txt: #ecf0f1; }
+.tema-contrast { --bg: #000000; --txt: #ffff00; }
+
+body { background-color: var(--bg); color: var(--txt); font-family: 'Open Sans', sans-serif; }
+.stock-critic { color: red; font-weight: bold; }
+.stock-baix { color: orange; }
+.stock-ok { color: green; }
+
+.contenidor { max-width: 800px; margin: auto; padding: 20px; }
+nav ul { display: flex; gap: 15px; list-style: none; padding: 0; }
