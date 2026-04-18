@@ -11,9 +11,9 @@ const isProxmox = !!process.env.PM2_HOME;
 const db = new MySQL();
 
 if (!isProxmox) {
-  db.init({ host: '127.0.0.1', port: 3306, user: 'root', password: '', database: 'minierp_db' });
+  db.init({ host: '127.0.0.1', port: 3306, user: 'root', password: '1234.', database: 'minierp_db' });
 } else {
-  db.init({ host: '127.0.0.1', port: 3306, user: 'super', password: '1234', database: 'minierp_db' });
+  db.init({ host: '127.0.0.1', port: 3306, user: 'super', password: '1234.', database: 'minierp_db' });
 }
 
 // 2. Configuració de rutes estàtiques (public/css i public/js)
