@@ -7,22 +7,26 @@
     --danger: #e74c3c;
     --success: #27ae60;
     --warning: #f39c12;
+    --bg: #f8f9fa; 
+    --card: #ffffff; 
+    --txt: #333; 
+    --border: #ddd;
 }
 
-/* Temes Requerits */
-.tema-clar { 
+/* Temes Requerits - Apliquen al body */
+body.tema-clar { 
     --bg: #f8f9fa; 
     --card: #ffffff; 
     --txt: #333; 
     --border: #ddd; 
 }
-.tema-nit { 
+body.tema-nit { 
     --bg: #1a1a1a; 
     --card: #2d2d2d; 
     --txt: #eee; 
     --border: #444; 
 }
-.tema-contrast { 
+body.tema-contrast { 
     --bg: #000000; 
     --card: #000000; 
     --txt: #ffff00; 
@@ -33,9 +37,9 @@
 body { 
     background-color: var(--bg); 
     color: var(--txt); 
-    font-family: 'Segoe UI', sans-serif; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
     margin: 0; 
-    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .contenidor { max-width: 1000px; margin: 20px auto; padding: 20px; }
@@ -63,13 +67,42 @@ body {
 .card {
     padding: 20px;
     border-radius: 10px;
-    background: rgba(0,0,0,0.03);
+    background: rgba(128, 128, 128, 0.05);
     text-align: center;
     border: 1px solid var(--border);
 }
 
 /* Mode Compacte/Complet */
 .d-none { display: none !important; }
+
+/* =========================================
+   Pestanyes (SOLUCIÓ AL PROBLEMA VISUAL)
+   ========================================= */
+.pestanyes {
+    display: flex;
+    gap: 20px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 20px;
+}
+
+.pestanyes button {
+    background: none !important; /* Forcem que no tingui fons blau */
+    color: var(--txt);
+    border: none;
+    padding: 10px 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    position: relative;
+    top: 2px; /* Posa el botó sobre la línia del div pare */
+    box-shadow: none !important;
+}
+
+.pestanyes button.active {
+    color: var(--accent);
+    font-weight: bold;
+    border-bottom: 4px solid var(--accent) !important;
+    border-radius: 0; /* Important per evitar la "bombolla" blava */
+}
 
 /* =========================================
    Taules i Codi de Colors
@@ -81,7 +114,7 @@ table {
 }
 
 th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border); }
-th { background: rgba(0,0,0,0.05); color: var(--accent); }
+th { background: rgba(128, 128, 128, 0.1); color: var(--accent); }
 
 /* Colors de Stock activats per JS */
 .stock-color-on.critic { background-color: rgba(231, 76, 60, 0.2) !important; color: var(--danger); font-weight: bold; }
@@ -91,9 +124,9 @@ th { background: rgba(0,0,0,0.05); color: var(--accent); }
 /* =========================================
    Formularis i Validació Visual
    ========================================= */
-.fila { display: flex; gap: 10px; margin-bottom: 20px; }
+.fila { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
 
-input[type="text"], input[type="number"], input[type="email"], select {
+input, select {
     padding: 10px;
     border: 1px solid var(--border);
     border-radius: 5px;
@@ -101,22 +134,18 @@ input[type="text"], input[type="number"], input[type="email"], select {
     color: var(--txt);
 }
 
-/* Camps en error */
 input.error-input {
     border: 2px solid var(--danger) !important;
-    outline: none;
 }
 
 .error-msg {
     color: var(--danger);
-    font-size: 0.8rem;
-    display: block;
-    margin-top: 4px;
+    font-size: 0.85rem;
     font-weight: bold;
 }
 
 /* =========================================
-   Botons i Interactivitat
+   Botons Generals
    ========================================= */
 button, .bto {
     background: var(--accent);
@@ -127,24 +156,15 @@ button, .bto {
     text-decoration: none;
     cursor: pointer;
     transition: 0.2s;
+    display: inline-block;
 }
 
-button:hover, .bto:hover { opacity: 0.8; transform: translateY(-1px); }
+button:hover, .bto:hover { opacity: 0.9; transform: translateY(-1px); }
 
-/* Pestanyes */
-.pestanyes button {
-    background: none;
-    color: var(--txt);
-    border-bottom: 3px solid transparent;
-}
-.pestanyes button.active {
-    border-bottom-color: var(--accent);
-    font-weight: bold;
-}
-
-/* Header */
+/* Header i Nav */
 header { background: var(--primary); color: white; padding: 15px; text-align: center; }
+nav.contenidor { padding-top: 0; padding-bottom: 0; }
 
 /* Especial per Alt Contrast */
 .tema-contrast th, .tema-contrast td { border: 1px solid var(--border); }
-.tema-contrast .bto, .tema-contrast button { border: 1px solid #fff; }
+.tema-contrast .bto, .tema-contrast button { border: 1px solid #ffff00; background: #000; color: #ffff00; }
