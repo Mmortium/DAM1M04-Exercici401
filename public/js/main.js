@@ -11,7 +11,7 @@ function init() {
         });
     }
 
-    // 2. Validació (Estil Temari)
+    // 2. Validació
     const frm = document.querySelector('#frmProducte');
     if (frm) {
         frm.addEventListener('submit', (e) => {

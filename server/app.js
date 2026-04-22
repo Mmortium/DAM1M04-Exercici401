@@ -11,7 +11,7 @@ const isProxmox = !!process.env.PM2_HOME;
 const db = new MySQL();
 
 if (!isProxmox) {
-  db.init({ host: '127.0.0.1', port: 3306, user: 'root', password: '1234', database: 'minierp_db' });
+  db.init({ host: '127.0.0.1', port: 3306, user: 'root', password: '1234.', database: 'minierp_db' });
 } else {
   db.init({ host: '127.0.0.1', port: 3306, user: 'super', password: '1234', database: 'minierp_db' });
 }
@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(express.urlencoded({ extended: true }));
 
 // 3. Configuració de Vistes
-// Como ya estamos en la carpeta 'server', no la añadimos a la ruta
+// estamos en la carpeta 'server', no añadimos a la ruta
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 hbs.registerPartials(path.join(__dirname, 'views', 'partials'));

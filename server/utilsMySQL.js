@@ -1,6 +1,6 @@
 var mysql = require('mysql2');
 
-class MySQL { // Cambiado 'Obj' a 'MySQL' para mayor claridad
+class MySQL { 
     // Inicia la connexió amb la base de dades
     init(parameters) {
         this.pool = mysql.createPool({
@@ -15,7 +15,7 @@ class MySQL { // Cambiado 'Obj' a 'MySQL' para mayor claridad
         this.pool.on('connection', (connection) => {
             connection.query(
                 'SET SESSION group_concat_max_len = 1048576',
-                () => {} // ignore errors
+                () => {} 
             );
         });
 

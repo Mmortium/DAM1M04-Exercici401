@@ -1,0 +1,37 @@
+<section class="container">
+  <h2>Gestió de Clients</h2>
+  
+  <form action="/clients" method="GET" class="mb-3">
+    <input type="text" name="cerca" placeholder="Nom o email..." class="form-control d-inline-block w-auto">
+    <button type="submit" class="btn btn-primary">Buscar</button>
+  </form>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Telèfon</th>
+        <th>Accions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each clients}}
+      <tr>
+        <td>{{this.name}}</td>
+        <td>{{this.email}}</td>
+        <td>{{this.phone}}</td>
+        <td>
+          <a href="/clientEditar?id={{this.id}}" class="btn btn-sm btn-warning">Editar</a>
+          <a href="/clientFitxa?id={{this.id}}" class="btn btn-sm btn-info">Fitxa</a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  
+  <div class="pagination">
+    <a href="/clients?pagina={{prevPage}}" class="btn btn-light">Anterior</a>
+    <a href="/clients?pagina={{nextPage}}" class="btn btn-light">Següent</a>
+  </div>
+</section>
