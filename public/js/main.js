@@ -96,6 +96,29 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+    // --- 4. GESTIÓ DE PESTANYES (DASHBOARD) ---
+    const pestanyes = document.querySelectorAll('.pestanyes button');
+    pestanyes.forEach((bto, index) => {
+        bto.addEventListener('click', () => {
+            // 1. Treure classe 'active' de tots els botons
+            pestanyes.forEach(b => b.classList.remove('active'));
+            // 2. Posar 'active' al que hem clicat
+            bto.classList.add('active');
+
+            // 3. Mostrar/Amagar els blocs corresponents
+            // Suposant que tens dos blocs amb IDs 'bloc-kpi' i 'bloc-llistats'
+            const blocKpi = document.querySelector('#bloc-kpi');
+            const blocLlistats = document.querySelector('#bloc-llistats');
+
+            if (index === 0) { // Resum KPIs
+                blocKpi?.classList.remove('d-none');
+                blocLlistats?.classList.add('d-none');
+            } else { // Llistats d'èxit
+                blocKpi?.classList.add('d-none');
+                blocLlistats?.classList.remove('d-none');
+            }
+        });
+    });
 });
 
 function showError(input, message) {
