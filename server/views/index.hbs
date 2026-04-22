@@ -1,17 +1,76 @@
 <section class="bloc">
     <h2>Benvingut al MiniERP</h2>
-    <div class="pestanyes">
-        <button id="btnKpi" class="active">Resum KPIs</button>
-    </div>
     
-    <div id="zonaKpi" class="grid-kpi">
-        <div class="card">
-            <h3>Alertes d'Stock</h3>
-            <p class="gran text-vermell">{{alertesStock}} productes baixos</p>
+    <div class="pestanyes">
+        <button id="btnKpi" class="active" onclick="showTab('kpi')">Resum KPIs</button>
+        <button id="btnLlistats" onclick="showTab('llistats')">Llistats d'èxit</button>
+    </div>
+
+    <div id="zonaKpi" class="tab-content">
+        <div class="controls mb-2">
+            <button id="toggleKpiMode" class="btn-sm">Tauler Compacte/Complet</button>
         </div>
-        <div class="card">
-            <h3>Vendes d'avui</h3>
-            <p class="gran">{{vendesAvui}} €</p>
+        
+        <div class="grid-kpi" id="kpiContainer">
+            <div class="card border-vermell">
+                <h3>Alertes d'Stock</h3>
+                <p class="gran text-vermell">{{alertesStock}} productes baixos</p>
+            </div>
+            <div class="card">
+                <h3>Vendes d'avui</h3>
+                <p class="gran">{{vendesAvui}} €</p>
+            </div>
+            <div class="card kpi-extra">
+                <h3>Vendes del mes</h3>
+                <p class="gran">{{vendesMes}} €</p>
+            </div>
+            <div class="card kpi-extra">
+                <h3>Comandes (Avui)</h3>
+                <p class="gran">{{comandesAvui}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="zonaLlistats" class="tab-content d-none">
+        <div class="controls mb-2">
+            <button id="toggleColorsStock" class="btn-sm">Activar/Desactivar Colors Stock</button>
+        </div>
+
+        <div class="grid-taules">
+            <div class="card">
+                <h3>Top 5 Productes Més Venuts</h3>
+                <table class="taula-erp" id="tablaTopProductes">
+                    <thead>
+                        <tr><th>Producte</th><th>Stock</th></tr>
+                    </thead>
+                    <tbody>
+                        {{#each topProductes}}
+                        <tr data-stock="{{this.stock}}">
+                            <td>{{this.name}}</td>
+                            <td>{{this.stock}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Últimes 5 Vendes</h3>
+                <table class="taula-erp">
+                    <thead>
+                        <tr><th>Data</th><th>Client</th><th>Total</th></tr>
+                    </thead>
+                    <tbody>
+                        {{#each ultimesVendes}}
+                        <tr>
+                            <td>{{this.data}}</td>
+                            <td>{{this.client_nom}}</td>
+                            <td>{{this.total}}€</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </section>

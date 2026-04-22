@@ -1,4 +1,6 @@
-/* Variables i Base */
+/* =========================================
+   Variables i Base
+   ========================================= */
 :root {
     --primary: #2c3e50;
     --accent: #3498db;
@@ -7,26 +9,47 @@
     --warning: #f39c12;
 }
 
-.tema-clar { --bg: #f8f9fa; --card: #ffffff; --txt: #333; --border: #ddd; }
-.tema-nit { --bg: #1a1a1a; --card: #2d2d2d; --txt: #eee; --border: #444; }
+/* Temes Requerits */
+.tema-clar { 
+    --bg: #f8f9fa; 
+    --card: #ffffff; 
+    --txt: #333; 
+    --border: #ddd; 
+}
+.tema-nit { 
+    --bg: #1a1a1a; 
+    --card: #2d2d2d; 
+    --txt: #eee; 
+    --border: #444; 
+}
+.tema-contrast { 
+    --bg: #000000; 
+    --card: #000000; 
+    --txt: #ffff00; 
+    --border: #ffff00; 
+    --accent: #ffff00;
+}
 
 body { 
     background-color: var(--bg); 
     color: var(--txt); 
     font-family: 'Segoe UI', sans-serif; 
     margin: 0; 
-    transition: 0.3s;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .contenidor { max-width: 1000px; margin: 20px auto; padding: 20px; }
 
-/* Seccions (Blocs) */
+/* =========================================
+   Seccions (Blocs) i Layout
+   ========================================= */
 .bloc { 
     background: var(--card); 
     padding: 25px; 
     border-radius: 12px; 
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     margin-bottom: 20px;
+    border: 1px solid var(--border);
 }
 
 /* Dashboard Grid */
@@ -45,10 +68,12 @@ body {
     border: 1px solid var(--border);
 }
 
-.gran { font-size: 2rem; font-weight: bold; margin: 10px 0; }
-.text-vermell { color: var(--danger); }
+/* Mode Compacte/Complet */
+.d-none { display: none !important; }
 
-/* Taules */
+/* =========================================
+   Taules i Codi de Colors
+   ========================================= */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -58,20 +83,41 @@ table {
 th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border); }
 th { background: rgba(0,0,0,0.05); color: var(--accent); }
 
-/* Colors de Stock (Classes aplicades pel Helper) */
-.stock-critic { background-color: rgba(231, 76, 60, 0.1); color: var(--danger); font-weight: bold; }
-.stock-baix { color: var(--warning); }
-.stock-ok { color: var(--success); }
+/* Colors de Stock activats per JS */
+.stock-color-on.critic { background-color: rgba(231, 76, 60, 0.2) !important; color: var(--danger); font-weight: bold; }
+.stock-color-on.baix   { background-color: rgba(243, 156, 18, 0.2) !important; color: var(--warning); }
+.stock-color-on.ok     { background-color: rgba(39, 174, 96, 0.2) !important; color: var(--success); }
 
-/* Formulari i Botons */
+/* =========================================
+   Formularis i Validació Visual
+   ========================================= */
 .fila { display: flex; gap: 10px; margin-bottom: 20px; }
-input[type="text"] {
-    flex-grow: 1;
+
+input[type="text"], input[type="number"], input[type="email"], select {
     padding: 10px;
     border: 1px solid var(--border);
     border-radius: 5px;
+    background: var(--card);
+    color: var(--txt);
 }
 
+/* Camps en error */
+input.error-input {
+    border: 2px solid var(--danger) !important;
+    outline: none;
+}
+
+.error-msg {
+    color: var(--danger);
+    font-size: 0.8rem;
+    display: block;
+    margin-top: 4px;
+    font-weight: bold;
+}
+
+/* =========================================
+   Botons i Interactivitat
+   ========================================= */
 button, .bto {
     background: var(--accent);
     color: white;
@@ -80,12 +126,25 @@ button, .bto {
     border-radius: 5px;
     text-decoration: none;
     cursor: pointer;
-    display: inline-block;
+    transition: 0.2s;
 }
 
-button:hover, .bto:hover { background: var(--primary); }
+button:hover, .bto:hover { opacity: 0.8; transform: translateY(-1px); }
 
-.botons { display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px; }
+/* Pestanyes */
+.pestanyes button {
+    background: none;
+    color: var(--txt);
+    border-bottom: 3px solid transparent;
+}
+.pestanyes button.active {
+    border-bottom-color: var(--accent);
+    font-weight: bold;
+}
 
-/* Header simple */
-header { background: var(--primary); color: white; padding: 10px 0; text-align: center; }
+/* Header */
+header { background: var(--primary); color: white; padding: 15px; text-align: center; }
+
+/* Especial per Alt Contrast */
+.tema-contrast th, .tema-contrast td { border: 1px solid var(--border); }
+.tema-contrast .bto, .tema-contrast button { border: 1px solid #fff; }

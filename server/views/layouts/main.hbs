@@ -6,12 +6,20 @@
     <script src="/js/main.js" defer></script>
     <title>MiniERP Shop</title>
 </head>
-<body onload="init()">
+<body>
+    <div class="theme-selector">
+        <button onclick="setTheme('clar')">☀️ Clar</button>
+        <button onclick="setTheme('nit')">🌙 Nit</button>
+        <button onclick="setTheme('contrast')">👁️ Alt Contrast</button>
+    </div>
+
     {{> header}}
     {{> menu}}
+
     <main class="contenidor">
         {{{body}}}
     </main>
+
     {{> footer}}
 </body>
 </html>
