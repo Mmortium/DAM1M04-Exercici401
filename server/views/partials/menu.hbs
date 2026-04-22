@@ -1,14 +1,18 @@
 <nav class="contenidor">
-    <div class="fila">
-        <a href="/" class="bto">Inici</a>
-        <a href="/productes" class="bto">Productes</a>
-        <a href="/clients" class="bto">Clients</a>
-        <a href="/vendes" class="bto">Vendes</a>
+    <div class="fila" style="justify-content: space-between; align-items: center;">
+        <div class="enllaços">
+            <a href="/" class="bto">Inici</a>
+            <a href="/productes" class="bto">Productes</a>
+            <a href="/clients" class="bto">Clients</a>
+            <a href="/vendes" class="bto">Vendes</a>
+        </div>
         
-        <select id="selTema">
-            <option value="clar">Tema Clar</option>
-            <option value="nit">Tema Nit</option>
-            <option value="contrast">Contrast</option>
-        </select>
+        <div class="tema-control">
+            <select id="selTema" style="padding: 5px 10px; cursor: pointer;">
+                <option value="clar">☀️ Clar</option>
+                <option value="nit">🌙 Nit Suau</option>
+                <option value="contrast">👁️ Alt Contrast</option>
+            </select>
+        </div>
     </div>
 </nav>

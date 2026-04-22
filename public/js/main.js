@@ -1,26 +1,36 @@
-function init() {
-    // 1. Selector de Temes (LocalStorage)
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // --- 1. SISTEMA DE TEMES ---
     const selTema = document.querySelector('#selTema');
+    const body = document.body;
+
+    const aplicarTema = (tema) => {
+        // Tu CSS usa .tema-clar, .tema-nit, etc.
+        body.classList.remove('tema-clar', 'tema-nit', 'tema-contrast');
+        body.classList.add('tema-' + tema);
+        localStorage.setItem('tema', tema);
+    };
+
     if (selTema) {
-        const tema = localStorage.getItem('tema') || 'clar';
-        document.body.className = 'tema-' + tema; // Assegura't que al CSS uses .tema-nit, etc.
-        selTema.value = tema;
+        const temaGuardat = localStorage.getItem('tema') || 'clar';
+        aplicarTema(temaGuardat);
+        selTema.value = temaGuardat;
+
         selTema.addEventListener('change', () => {
-            document.body.className = 'tema-' + selTema.value;
-            localStorage.setItem('tema', selTema.value);
+            aplicarTema(selTema.value);
         });
     }
 
-    // 2. Validació Avançada (Productes i Clients)
+    // --- 2. VALIDACIÓ DE FORMULARIS ---
     const forms = document.querySelectorAll('form'); 
     forms.forEach(frm => {
         frm.addEventListener('submit', (e) => {
             let valid = true;
-            // Netejar errors previs
-            frm.querySelectorAll('.error-msg').forEach(el => el.innerText = '');
-            frm.querySelectorAll('input').forEach(el => el.style.borderColor = '');
+            
+            // Netejar errors previs (usant la teva classe .error-input)
+            frm.querySelectorAll('.error-msg').forEach(el => el.remove());
+            frm.querySelectorAll('input').forEach(el => el.classList.remove('error-input'));
 
-            // Validació segons el tipus de formulari (mirant el camp hidden 'taula')
             const taula = frm.querySelector('input[name="taula"]')?.value;
 
             if (taula === 'productes') {
@@ -28,15 +38,15 @@ function init() {
                 const preu = frm.querySelector('input[name="price"]');
                 const stock = frm.querySelector('input[name="stock"]');
 
-                if (nom.value.length < 3) {
+                if (nom && nom.value.length < 3) {
                     showError(nom, "Nom massa curt (mínim 3)");
                     valid = false;
                 }
-                if (parseFloat(preu.value) <= 0) {
+                if (preu && parseFloat(preu.value) <= 0) {
                     showError(preu, "El preu ha de ser positiu");
                     valid = false;
                 }
-                if (parseInt(stock.value) < 0 || isNaN(stock.value)) {
+                if (stock && (parseInt(stock.value) < 0 || isNaN(stock.value))) {
                     showError(stock, "Stock no vàlid");
                     valid = false;
                 }
@@ -45,11 +55,11 @@ function init() {
             if (taula === 'clients') {
                 const email = frm.querySelector('input[name="email"]');
                 const nom = frm.querySelector('input[name="name"]');
-                if (!email.value.includes('@')) {
+                if (email && !email.value.includes('@')) {
                     showError(email, "Format d'email incorrecte");
                     valid = false;
                 }
-                if (nom.value === "") {
+                if (nom && nom.value.trim() === "") {
                     showError(nom, "El nom és obligatori");
                     valid = false;
                 }
@@ -59,49 +69,39 @@ function init() {
         });
     });
 
-    // 3. Toggles del Dashboard (KPI i Llistats)
+    // --- 3. TOGGLES (KPI i STOCK) ---
     const btnKpi = document.querySelector('#toggleKpiMode');
     if (btnKpi) {
         btnKpi.addEventListener('click', () => {
-            // Alterna entre mostrar o amagar els elements extres del KPI
-            document.querySelectorAll('.kpi-extra').forEach(el => {
-                el.classList.toggle('d-none');
-            });
+            document.querySelectorAll('.kpi-extra').forEach(el => el.classList.toggle('d-none'));
         });
     }
 
     const btnColors = document.querySelector('#toggleColorsStock');
     if (btnColors) {
         btnColors.addEventListener('click', () => {
+            // Aplica la teva lògica de classes CSS per a stock
             const files = document.querySelectorAll('tr[data-stock]');
             files.forEach(fila => {
                 const stock = parseInt(fila.dataset.stock);
-                // Si ja té classe de color, la treiem, si no, la posem
+                fila.classList.toggle('stock-color-on');
+                
                 if (fila.classList.contains('stock-color-on')) {
-                    fila.style.backgroundColor = "";
-                    fila.classList.remove('stock-color-on');
+                    if (stock <= 5) fila.classList.add('critic');
+                    else if (stock <= 20) fila.classList.add('baix');
+                    else fila.classList.add('ok');
                 } else {
-                    fila.classList.add('stock-color-on');
-                    if (stock <= 5) fila.style.backgroundColor = "#ffcccc"; // Vermell
-                    else if (stock <= 20) fila.style.backgroundColor = "#ffe6b3"; // Taronja
-                    else fila.style.backgroundColor = "#ccffcc"; // Verd
+                    fila.classList.remove('critic', 'baix', 'ok');
                 }
             });
         });
     }
-}
+});
 
-// Funció auxiliar per mostrar errors sota el camp (requisits)
 function showError(input, message) {
-    input.style.borderColor = "red";
-    // Busquem un element següent amb classe error-msg o el creem
-    let errorSpan = input.parentNode.querySelector('.error-msg');
-    if (!errorSpan) {
-        errorSpan = document.createElement('small');
-        errorSpan.className = 'error-msg';
-        errorSpan.style.color = "red";
-        errorSpan.style.display = "block";
-        input.parentNode.appendChild(errorSpan);
-    }
+    input.classList.add('error-input'); // Classe del teu CSS
+    let errorSpan = document.createElement('small');
+    errorSpan.className = 'error-msg'; // Classe del teu CSS
     errorSpan.innerText = message;
+    input.insertAdjacentElement('afterend', errorSpan);
 }
