@@ -1,23 +1,41 @@
-<form id="formClient" action="{{action}}" method="POST">
-  <input type="hidden" name="taula" value="clients">
-  {{#if client.id}}<input type="hidden" name="id" value="{{client.id}}">{{/if}}
+<section class="bloc">
+  <h2>{{#if client.id}}Editar Client{{else}}Afegir Client{{/if}}</h2>
 
-  <div class="form-group">
-    <label>Nom:</label>
-    <input type="text" name="name" id="name" class="form-control" value="{{client.name}}">
-    <small class="error-text text-danger" id="err-name"></small>
-  </div>
+  <form id="formClient" action="{{#if client.id}}/Update{{else}}/create{{/if}}" method="POST">
+    <input type="hidden" name="taula" value="clients">
+    
+    {{#if client.id}}
+      <input type="hidden" name="id" value="{{client.id}}">
+    {{/if}}
 
-  <div class="form-group">
-    <label>Email:</label>
-    <input type="email" name="email" id="email" class="form-control" value="{{client.email}}">
-    <small class="error-text text-danger" id="err-email"></small>
-  </div>
+    <div class="fila">
+      <label>Nom:</label>
+      <input type="text" name="name" id="name" value="{{client.name}}">
+      <small class="error-msg" id="err-name"></small>
+    </div>
 
-  <button type="submit" class="btn btn-success">Guardar</button>
-  {{#if client.id}}
-    <button formaction="/Delete" method="POST" class="btn btn-danger">Eliminar</button>
-  {{/if}}
-</form>
+    <div class="fila">
+      <label>Email:</label>
+      <input type="email" name="email" id="email" value="{{client.email}}">
+      <small class="error-msg" id="err-email"></small>
+    </div>
+
+    <div class="fila">
+      <label>Telèfon:</label>
+      <input type="text" name="phone" id="phone" value="{{client.phone}}">
+      <small class="error-msg" id="err-phone"></small>
+    </div>
+
+    <div class="botons">
+      <button type="submit" class="bto">Guardar</button>
+      
+      {{#if client.id}}
+        <button formaction="/Delete" type="submit" class="bto bto-vermell" onclick="return confirm('Segur?')">Eliminar</button>
+      {{/if}}
+      
+      <a href="/clients" class="bto" style="background: gray;">Cancel·lar</a>
+    </div>
+  </form>
+</section>
 
 <script src="/js/validaClient.js"></script>
