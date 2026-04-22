@@ -105,6 +105,33 @@ app.get('/clients', async (req, res) => {
     } catch (e) { res.status(500).send("Error a Clients"); }
 });
 
+// --- VENDES (Llistat) ---
+app.get('/vendes', async (req, res) => {
+    try {
+        const pagina = parseInt(req.query.pagina) || 0;
+        const limit = 10;
+        const offset = pagina * limit;
+
+        // Query per obtenir les vendes amb el nom del client fent un JOIN
+        const rows = await db.query(`
+            SELECT s.id, s.sale_date as data, c.name as client_nom, s.total 
+            FROM sales s 
+            JOIN customers c ON s.customer_id = c.id 
+            ORDER BY s.sale_date DESC 
+            LIMIT ${limit} OFFSET ${offset}`);
+
+        res.render('vendes', {
+            layout: 'layouts/main',
+            vendes: rows,
+            pagina,
+            next: pagina + 1,
+            prev: pagina > 0 ? pagina - 1 : 0
+        });
+    } catch (e) { 
+        res.status(500).send("Error a Vendes: " + e.message); 
+    }
+});
+
 // --- FORMULARIS (Afegir i Editar) ---
 app.get('/producteAfegir', (req, res) => res.render('producteForm', { layout: 'layouts/main', taula: 'productes' }));
 app.get('/clientAfegir', (req, res) => res.render('clientForm', { layout: 'layouts/main', taula: 'clients' }));

@@ -1,0 +1,38 @@
+<div class="bloc">
+    <div class="fila" style="justify-content: space-between;">
+        <h2>Gestió de Vendes</h2>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Data</th>
+                <th>Client</th>
+                <th>Total Facturat</th>
+                <th>Accions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each vendes}}
+            <tr>
+                <td>#{{this.id}}</td>
+                <td>{{this.data}}</td>
+                <td>{{this.client_nom}}</td>
+                <td><strong>{{this.total}} €</strong></td>
+                <td>
+                    <button class="bto" style="background: var(--accent); padding: 5px 10px;">Veure tiquet</button>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <div class="fila" style="justify-content: center; margin-top: 20px;">
+        {{#if pagina}}
+            <a href="/vendes?pagina={{prev}}" class="bto">⬅️ Anteriors</a>
+        {{/if}}
+        <span style="padding: 10px;">Pàgina {{pagina}}</span>
+        <a href="/vendes?pagina={{next}}" class="bto">Següents ➡️</a>
+    </div>
+</div>
