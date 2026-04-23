@@ -1,0 +1,38 @@
+<section class="bloc">
+    <a href="/clients" class="bto-sm">⬅️ Tornar</a>
+    <h2>Fitxa del Client: {{client.name}}</h2>
+    
+    <div class="grid-kpi">
+        <div class="card">
+            <h3>Contacte</h3>
+            <p>{{client.email}}</p>
+            <p>{{client.phone}}</p>
+        </div>
+        <div class="card">
+            <h3>Total Gastat</h3>
+            <p class="preu">{{totalGastat}} €</p>
+        </div>
+    </div>
+
+    <h3>Últimes 10 Compres</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID Venda</th>
+                <th>Data</th>
+                <th>Mètode</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each compres}}
+            <tr>
+                <td>#{{this.id}}</td>
+                <td>{{this.sale_date}}</td>
+                <td>{{this.payment_method}}</td>
+                <td><strong>{{this.total}} €</strong></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</section>

@@ -100,14 +100,28 @@ app.get('/clients', async (req, res) => {
     try {
         const pagina = parseInt(req.query.pagina) || 0;
         const cerca = req.query.cerca || '';
+        const esVip = req.query.vip === 'true';
         const limit = 10;
         const offset = pagina * limit;
 
-        const rows = await db.query(`
-            SELECT c.*, (SELECT COUNT(*) FROM sales WHERE customer_id = c.id) as num_compres 
+        // Query base amb subquery per comptar compres
+        let sql = `
+            SELECT c.*, 
+            (SELECT COUNT(*) FROM sales WHERE customer_id = c.id) as num_compres 
             FROM customers c 
-            WHERE name LIKE '%${cerca}%' OR email LIKE '%${cerca}%'
-            LIMIT ${limit} OFFSET ${offset}`);
+            WHERE (name LIKE ? OR email LIKE ?)`;
+        
+        const params = [`%${cerca}%`, `%${cerca}%`];
+
+        // Si demanen VIP, filtrem els que tenen més de 2 compres
+        if (esVip) {
+            sql += ` HAVING num_compres > 2`;
+        }
+
+        sql += ` LIMIT ? OFFSET ?`;
+        params.push(limit, offset);
+
+        const rows = await db.query(sql, params);
 
         res.render('clients', {
             layout: 'layouts/main',
@@ -116,7 +130,21 @@ app.get('/clients', async (req, res) => {
             next: pagina + 1,
             prev: pagina > 0 ? pagina - 1 : 0
         });
-    } catch (e) { res.status(500).send("Error a Clients"); }
+    } catch (e) { res.status(500).send("Error a Clients: " + e.message); }
+});
+
+app.get('/clientFitxa', async (req, res) => {
+    const id = req.query.id;
+    const client = await db.query(`SELECT * FROM customers WHERE id = ${id}`);
+    const compres = await db.query(`SELECT * FROM sales WHERE customer_id = ${id} ORDER BY sale_date DESC LIMIT 10`);
+    const total = await db.query(`SELECT SUM(total) as suma FROM sales WHERE customer_id = ${id}`);
+
+    res.render('clientFitxa', {
+        layout: 'layouts/main',
+        client: client[0],
+        compres: compres,
+        totalGastat: total[0].suma || 0
+    });
 });
 
 // --- VENDES (Llistat) ---
