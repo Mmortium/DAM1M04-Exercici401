@@ -1,35 +1,47 @@
 <section class="bloc">
-    <h2>Gestió de Productes</h2>
+    <div class="fila-header">
+        <h2>📦 Gestió de Productes</h2>
+        <a href="/producteAfegir" class="bto bto-success">+ Nou Producte</a>
+    </div>
     
-    <form action="/productes" method="GET" class="fila">
-        <input type="text" name="cerca" value="{{cerca}}" placeholder="Cerca per nom...">
-        <button type="submit">Filtrar</button>
-    </form>
+    <div class="accions-taula">
+        <form action="/productes" method="GET" class="fila">
+            <input type="text" name="cerca" value="{{cerca}}" placeholder="Cerca per nom...">
+            <button type="submit" class="bto">Cercar</button>
+        </form>
+        <button id="btnToggleColors" class="bto">🎨 Toggle Colors Stock</button>
+    </div>
 
     <table>
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nom</th>
+                <th>Categoria</th>
                 <th>Preu</th>
                 <th>Stock</th>
+                <th>Accions</th>
             </tr>
         </thead>
         <tbody>
             {{#each productes}}
-            <tr class="{{colorStock this.stock}}">
-                <td>{{this.id}}</td>
+            <tr class="stock-val {{colorStock this.stock}}">
                 <td>{{this.name}}</td>
+                <td>{{this.category}}</td>
                 <td>{{this.price}} €</td>
-                <td>{{this.stock}}</td>
+                <td><strong>{{this.stock}}</strong></td>
+                <td>
+                    <a href="/producteEditar?id={{this.id}}" class="bto-sm">Editar</a>
+                </td>
             </tr>
             {{/each}}
         </tbody>
     </table>
 
-    <div class="botons">
-        <a href="/productes?pagina={{prev}}&cerca={{cerca}}" class="bto">Anterior</a>
-        <span>Pàgina {{pagina}}</span>
-        <a href="/productes?pagina={{next}}&cerca={{cerca}}" class="bto">Següent</a>
+    <div class="paginacio">
+        {{#if pagina}}
+            <a href="/productes?pagina={{prev}}&cerca={{cerca}}" class="bto">⬅️ Anterior</a>
+        {{/if}}
+        <span class="info-pagi">Pàgina actual: <strong>{{pagina}}</strong></span>
+        <a href="/productes?pagina={{next}}&cerca={{cerca}}" class="bto">Següent ➡️</a>
     </div>
 </section>
