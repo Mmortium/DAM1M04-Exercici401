@@ -39,22 +39,36 @@ hbs.registerHelper('colorStock', (stock) => {
 // --- DASHBOARD (KPIs i Llistats resum) ---
 app.get('/', async (req, res) => {
     try {
+        // KPIs: Avui vs Mes
+        const vAvui = await db.query('SELECT SUM(total) as suma FROM sales WHERE DATE(sale_date) = CURDATE()');
+        const vMes = await db.query('SELECT SUM(total) as suma FROM sales WHERE MONTH(sale_date) = MONTH(CURDATE()) AND YEAR(sale_date) = YEAR(CURDATE())');
+        const cAvui = await db.query('SELECT COUNT(*) as qtat FROM sales WHERE DATE(sale_date) = CURDATE()');
+        const cMes = await db.query('SELECT COUNT(*) as qtat FROM sales WHERE MONTH(sale_date) = MONTH(CURDATE()) AND YEAR(sale_date) = YEAR(CURDATE())');
         const stockBaix = await db.query('SELECT COUNT(*) as total FROM products WHERE stock <= 5');
-        const vendes = await db.query('SELECT SUM(total) as suma FROM sales WHERE DATE(sale_date) = CURDATE()');
-        const comandes = await db.query('SELECT COUNT(*) as qtat FROM sales WHERE DATE(sale_date) = CURDATE()');
         
-        const top = await db.query('SELECT name, stock FROM products ORDER BY stock ASC LIMIT 5');
+        // Llistat: Últimes 5 vendes
         const ultimes = await db.query(`
             SELECT s.sale_date as data, c.name as client_nom, s.total 
             FROM sales s 
             JOIN customers c ON s.customer_id = c.id 
             ORDER BY s.sale_date DESC LIMIT 5`);
 
+        // Llistat: Top 5 productes més venuts (per quantitat en sale_items)
+        const top = await db.query(`
+            SELECT p.name, SUM(si.qty) as total_venut 
+            FROM products p 
+            JOIN sale_items si ON p.id = si.product_id 
+            GROUP BY p.id ORDER BY total_venut DESC LIMIT 5`);
+
         res.render('index', { 
             layout: 'layouts/main',
-            alertesStock: stockBaix[0].total,
-            vendesAvui: vendes[0].suma || 0,
-            comandesAvui: comandes[0].qtat,
+            kpis: {
+                vAvui: vAvui[0].suma || 0,
+                vMes: vMes[0].suma || 0,
+                cAvui: cAvui[0].qtat || 0,
+                cMes: cMes[0].qtat || 0,
+                alertesStock: stockBaix[0].total
+            },
             topProductes: top,
             ultimesVendes: ultimes
         });

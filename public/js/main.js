@@ -1,130 +1,47 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. SISTEMA DE TEMES ---
-    const selTema = document.querySelector('#selTema');
-    const body = document.body;
+    // 1. GESTIÓ DE TEMES
+    const themeSelector = document.getElementById('themeSelector');
+    const savedTheme = localStorage.getItem('erp-tema') || 'tema-clar';
+    
+    // Apliquem el tema guardat al body
+    document.body.className = savedTheme;
+    if(themeSelector) themeSelector.value = savedTheme;
 
-    const aplicarTema = (tema) => {
-        // Tu CSS usa .tema-clar, .tema-nit, etc.
-        body.classList.remove('tema-clar', 'tema-nit', 'tema-contrast');
-        body.classList.add('tema-' + tema);
-        localStorage.setItem('tema', tema);
-    };
+    themeSelector?.addEventListener('change', (e) => {
+        const selectedTheme = e.target.value;
+        document.body.className = selectedTheme;
+        localStorage.setItem('erp-tema', selectedTheme);
+    });
 
-    if (selTema) {
-        const temaGuardat = localStorage.getItem('tema') || 'clar';
-        aplicarTema(temaGuardat);
-        selTema.value = temaGuardat;
-
-        selTema.addEventListener('change', () => {
-            aplicarTema(selTema.value);
-        });
-    }
-
-    // --- 2. VALIDACIÓ DE FORMULARIS ---
-    const forms = document.querySelectorAll('form'); 
-    forms.forEach(frm => {
-        frm.addEventListener('submit', (e) => {
-            let valid = true;
+    // 2. LÒGICA DE PESTANYES
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Activar botó
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
             
-            // Netejar errors previs (usant la teva classe .error-input)
-            frm.querySelectorAll('.error-msg').forEach(el => el.remove());
-            frm.querySelectorAll('input').forEach(el => el.classList.remove('error-input'));
-
-            const taula = frm.querySelector('input[name="taula"]')?.value;
-
-            if (taula === 'productes') {
-                const nom = frm.querySelector('input[name="name"]');
-                const preu = frm.querySelector('input[name="price"]');
-                const stock = frm.querySelector('input[name="stock"]');
-
-                if (nom && nom.value.length < 3) {
-                    showError(nom, "Nom massa curt (mínim 3)");
-                    valid = false;
-                }
-                if (preu && parseFloat(preu.value) <= 0) {
-                    showError(preu, "El preu ha de ser positiu");
-                    valid = false;
-                }
-                if (stock && (parseInt(stock.value) < 0 || isNaN(stock.value))) {
-                    showError(stock, "Stock no vàlid");
-                    valid = false;
-                }
-            }
-
-            if (taula === 'clients') {
-                const email = frm.querySelector('input[name="email"]');
-                const nom = frm.querySelector('input[name="name"]');
-                if (email && !email.value.includes('@')) {
-                    showError(email, "Format d'email incorrecte");
-                    valid = false;
-                }
-                if (nom && nom.value.trim() === "") {
-                    showError(nom, "El nom és obligatori");
-                    valid = false;
-                }
-            }
-
-            if (!valid) e.preventDefault();
+            // Mostrar secció
+            const target = tab.dataset.target;
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('d-none');
+            });
+            document.getElementById(target).classList.remove('d-none');
         });
     });
 
-    // --- 3. TOGGLES (KPI i STOCK) ---
-    const btnKpi = document.querySelector('#toggleKpiMode');
-    if (btnKpi) {
-        btnKpi.addEventListener('click', () => {
-            document.querySelectorAll('.kpi-extra').forEach(el => el.classList.toggle('d-none'));
+    // 3. TOGGLES DEL DASHBOARD
+    document.getElementById('btnToggleTauler')?.addEventListener('click', () => {
+        document.querySelectorAll('.kpi-extra').forEach(el => {
+            el.classList.toggle('d-none');
         });
-    }
+    });
 
-    const btnColors = document.querySelector('#toggleColorsStock');
-    if (btnColors) {
-        btnColors.addEventListener('click', () => {
-            // Aplica la teva lògica de classes CSS per a stock
-            const files = document.querySelectorAll('tr[data-stock]');
-            files.forEach(fila => {
-                const stock = parseInt(fila.dataset.stock);
-                fila.classList.toggle('stock-color-on');
-                
-                if (fila.classList.contains('stock-color-on')) {
-                    if (stock <= 5) fila.classList.add('critic');
-                    else if (stock <= 20) fila.classList.add('baix');
-                    else fila.classList.add('ok');
-                } else {
-                    fila.classList.remove('critic', 'baix', 'ok');
-                }
-            });
-        });
-    }
-    // --- 4. GESTIÓ DE PESTANYES (DASHBOARD) ---
-    const pestanyes = document.querySelectorAll('.pestanyes button');
-    pestanyes.forEach((bto, index) => {
-        bto.addEventListener('click', () => {
-            // 1. Treure classe 'active' de tots els botons
-            pestanyes.forEach(b => b.classList.remove('active'));
-            // 2. Posar 'active' al que hem clicat
-            bto.classList.add('active');
-
-            // 3. Mostrar/Amagar els blocs corresponents
-            // Suposant que tens dos blocs amb IDs 'bloc-kpi' i 'bloc-llistats'
-            const blocKpi = document.querySelector('#bloc-kpi');
-            const blocLlistats = document.querySelector('#bloc-llistats');
-
-            if (index === 0) { // Resum KPIs
-                blocKpi?.classList.remove('d-none');
-                blocLlistats?.classList.add('d-none');
-            } else { // Llistats d'èxit
-                blocKpi?.classList.add('d-none');
-                blocLlistats?.classList.remove('d-none');
-            }
+    document.getElementById('btnToggleColors')?.addEventListener('click', () => {
+        // Apliquem la classe de color a les cards i files de stock
+        document.querySelectorAll('.card, .stock-val').forEach(el => {
+            el.classList.toggle('stock-color-on');
         });
     });
 });
-
-function showError(input, message) {
-    input.classList.add('error-input'); // Classe del teu CSS
-    let errorSpan = document.createElement('small');
-    errorSpan.className = 'error-msg'; // Classe del teu CSS
-    errorSpan.innerText = message;
-    input.insertAdjacentElement('afterend', errorSpan);
-}
