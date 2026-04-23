@@ -40,10 +40,10 @@
     </table>
   
     <div class="paginacio">
-        {{#if pagina}}
-            <a href="/clients?pagina={{prev}}&cerca={{cerca}}" class="bto">Anterior</a>
-        {{/if}}
-        <span>Pàgina {{pagina}}</span>
-        <a href="/clients?pagina={{next}}&cerca={{cerca}}" class="bto">Següent</a>
+      {{#if pagina}}
+          <a href="/clients?pagina={{prev}}&cerca={{cerca}}&vip={{vip}}" class="bto">Anterior</a>
+      {{/if}}
+      <span>Pàgina <strong>{{pagina}}</strong></span>
+      <a href="/clients?pagina={{next}}&cerca={{cerca}}&vip={{vip}}" class="bto">Següent</a>
     </div>
 </section>

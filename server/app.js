@@ -104,33 +104,35 @@ app.get('/clients', async (req, res) => {
         const limit = 10;
         const offset = pagina * limit;
 
-        // Query base amb subquery per comptar compres
+        // Construïm la query manualment per evitar l'error del '?'
         let sql = `
             SELECT c.*, 
             (SELECT COUNT(*) FROM sales WHERE customer_id = c.id) as num_compres 
             FROM customers c 
-            WHERE (name LIKE ? OR email LIKE ?)`;
+            WHERE (name LIKE '%${cerca}%' OR email LIKE '%${cerca}%')`;
         
-        const params = [`%${cerca}%`, `%${cerca}%`];
-
-        // Si demanen VIP, filtrem els que tenen més de 2 compres
+        // Si demanen VIP, filtrem per tenir més de 2 compres (per exemple)
         if (esVip) {
             sql += ` HAVING num_compres > 2`;
         }
 
-        sql += ` LIMIT ? OFFSET ?`;
-        params.push(limit, offset);
+        // Afegim paginació
+        sql += ` LIMIT ${limit} OFFSET ${offset}`;
 
-        const rows = await db.query(sql, params);
+        const rows = await db.query(sql);
 
         res.render('clients', {
             layout: 'layouts/main',
             clients: rows,
-            pagina, cerca,
+            pagina, 
+            cerca,
+            vip: esVip,
             next: pagina + 1,
             prev: pagina > 0 ? pagina - 1 : 0
         });
-    } catch (e) { res.status(500).send("Error a Clients: " + e.message); }
+    } catch (e) { 
+        res.status(500).send("Error a Clients: " + e.message); 
+    }
 });
 
 app.get('/clientFitxa', async (req, res) => {
