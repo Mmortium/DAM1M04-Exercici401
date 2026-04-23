@@ -21,7 +21,8 @@
                 <td>{{this.client_nom}}</td>
                 <td><strong>{{this.total}} €</strong></td>
                 <td>
-                    <button class="bto" style="background: var(--accent); padding: 5px 10px;">Veure tiquet</button>
+                    <button class="bto" data-id="{{this.id}}" style="background: var(--accent); 
+                    padding: 5px 10px;">Veure tiquet</button>
                 </td>
             </tr>
             {{/each}}

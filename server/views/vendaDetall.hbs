@@ -1,0 +1,36 @@
+<div style="padding: 20px; font-family: sans-serif;">
+    <h2>Tiquet #{{venda.id}}</h2>
+    <p><strong>Client:</strong> {{venda.client_nom}}</p>
+    <p><strong>Data:</strong> {{venda.sale_date}}</p>
+    <p><strong>Mètode de pagament:</strong> {{venda.payment_method}}</p>
+
+    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr style="background: #eee;">
+                <th style="padding: 8px;">Producte</th>
+                <th style="padding: 8px;">Quantitat</th>
+                <th style="padding: 8px;">Preu Unit.</th>
+                <th style="padding: 8px;">Total Línia</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each items}}
+            <tr>
+                <td style="padding: 8px;">{{this.producte_nom}}</td>
+                <td style="padding: 8px; text-align: center;">{{this.qty}}</td>
+                <td style="padding: 8px; text-align: right;">{{this.unit_price}} €</td>
+                <td style="padding: 8px; text-align: right;">{{this.line_total}} €</td>
+            </tr>
+            {{/each}}
+        </tbody>
+        <tfoot>
+            <tr style="font-weight: bold;">
+                <td colspan="3" style="padding: 8px; text-align: right;">TOTAL:</td>
+                <td style="padding: 8px; text-align: right;">{{venda.total}} €</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <br>
+    <a href="/vendes" style="text-decoration: none; color: var(--accent);">← Tornar al llistat</a>
+</div>

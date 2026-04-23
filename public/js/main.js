@@ -44,4 +44,18 @@ document.addEventListener('DOMContentLoaded', () => {
             el.classList.toggle('stock-color-on');
         });
     });
+
+    // 4. GESTIÓ DE TIQUETS
+    document.addEventListener('click', (e) => {
+    if (e.target && e.target.classList.contains('bto')) {
+        const id = e.target.dataset.id;
+        
+        if (id) {
+            // cambie a la vista del tiquet
+            window.location.href = `/venda/${id}`;
+        } else {
+            console.error('Error: El botón no tiene un data-id configurado');
+        }
+    }
+});
 });

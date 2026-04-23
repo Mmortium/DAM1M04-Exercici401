@@ -175,6 +175,35 @@ app.get('/vendes', async (req, res) => {
         res.status(500).send("Error a Vendes: " + e.message); 
     }
 });
+app.get('/venda/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        
+        // 1. Info general de la venda
+        const venda = await db.query(`
+            SELECT s.*, c.name as client_nom 
+            FROM sales s 
+            JOIN customers c ON s.customer_id = c.id 
+            WHERE s.id = ${id}`);
+
+        // 2. Detalls de la venda (sale_items)
+        // Usamos unit_price y line_total que son tus nombres reales
+        const items = await db.query(`
+            SELECT si.qty, si.unit_price, si.line_total, p.name as producte_nom
+            FROM sale_items si
+            JOIN products p ON si.product_id = p.id
+            WHERE si.sale_id = ${id}`);
+
+        res.render('vendaDetall', {
+            layout: 'layouts/main',
+            venda: venda[0],
+            items: items
+        });
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Error al carregar el tiquet: " + e.message);
+    }
+});
 
 // --- FORMULARIS (Afegir i Editar) ---
 app.get('/producteAfegir', (req, res) => res.render('producteForm', { layout: 'layouts/main', taula: 'productes' }));
