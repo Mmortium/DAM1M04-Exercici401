@@ -4,7 +4,6 @@ document.getElementById('formClient').addEventListener('submit', function(e) {
     const name = document.getElementById('name');
 
     // 1. Netejar errors i estils previs
-    // Canviem .error-text per .error-msg per coincidir amb el teu CSS
     document.querySelectorAll('.error-msg').forEach(el => el.innerText = '');
     
     // Netegem el color de vora de tots els inputs del form
@@ -16,7 +15,7 @@ document.getElementById('formClient').addEventListener('submit', function(e) {
     if (name.value.trim().length < 3) {
         const errNom = document.getElementById('err-name');
         if (errNom) errNom.innerText = "El nom ha de tenir almenys 3 caràcters";
-        name.style.borderColor = "var(--danger)"; // Usem la teva variable CSS
+        name.style.borderColor = "var(--danger)"; // Usem CSS
         isValid = false;
     }
 

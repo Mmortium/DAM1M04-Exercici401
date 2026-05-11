@@ -187,7 +187,6 @@ app.get('/venda/:id', async (req, res) => {
             WHERE s.id = ${id}`);
 
         // 2. Detalls de la venda (sale_items)
-        // Usamos unit_price y line_total que son tus nombres reales
         const items = await db.query(`
             SELECT si.qty, si.unit_price, si.line_total, p.name as producte_nom
             FROM sale_items si
